@@ -1,0 +1,45 @@
+const Pool = require('pg-pool');
+const pool = new Pool({
+host: 'ec2-54-243-213-188.compute-1.amazonaws.com',
+port: '5432',
+user: 'yqghebejkgtyuk',
+password:'e4ec888ff29da9d31eeb4111990c441462a95d4087f8cb6230151767a51712b2',
+database: 'dfip05gaio33q9',
+ssl: true
+});
+
+let AdministradorModel ={}
+AdministradorModel.getAdministrador=(callback)=>{
+  if (pool) {
+    pool.query('select * from administrador order by id_administrador',
+    (err,rows)=>{
+      if (err) {
+        throw err;
+
+
+      }else {
+        callback(null,rows);
+      }
+    }
+  )
+  }
+};
+AdministradorModel.insertAdministrador=(administradorData,callback)=>{
+if (pool) {
+  pool.query(
+    'insert into administrador set ?',administradorData,
+(err,results)=>{
+  if (err) {
+    throw err;
+  }else {
+    callback(null,{
+      'insertId': results.insertId
+    })
+  }
+}
+)
+
+}
+};
+
+module.exports = AdministradorModel;
